@@ -14,6 +14,7 @@ namespace CursoEntityF
         public string Nome { get; set; }
         public string Unidade { get; set; }
         public IList<PromocaoProduto> Promocoes { get; set; }
+        public IList<Compra> Compras { get; set; }
 
         public override string ToString()
         {

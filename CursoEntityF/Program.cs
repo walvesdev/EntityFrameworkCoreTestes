@@ -15,17 +15,45 @@ namespace CursoEntityF
     {
         static void Main(string[] args)
         {
+            JoinUmParaMuitos();
+        }
+
+        private static void JoinUmParaMuitos()
+        {
+            using (var banco = new LojaContext())
+            {
+                banco.LogSQLToConsole();
+
+                var cliente = banco.Clientes.Include(c => c.EnderecoDeEntrega).FirstOrDefault();
+
+                Console.WriteLine($"Endereço de entrega: {cliente.EnderecoDeEntrega.Logradouro}");
+
+                var produto = banco.Produtos.Include(c => c.Compras).FirstOrDefault();
+
+                Console.WriteLine($"Mostrando as compras do produto {produto.Nome}");
+                foreach (var item in produto.Compras)
+                {
+
+                    Console.WriteLine(item);
+
+                }
+
+            }
+        }
+
+        private static void JoinMuitosParaMuitos()
+        {
             using (var banco = new LojaContext())
             {
                 banco.LogSQLToConsole();
 
                 var promocao = banco
                     .Promocoes
-                    .Include( p => p.Produtos)   
-                    .ThenInclude(pr => pr.Produto)
+                    .Include(p => p.Produtos)
+                    .ThenInclude(pp => pp.Produto)
                     .FirstOrDefault();
 
-               
+
                 Console.WriteLine("\nMostrando os produtos da prmoção!");
 
                 foreach (var item in promocao.Produtos)
@@ -33,7 +61,6 @@ namespace CursoEntityF
                     Console.WriteLine(item.Produto);
                 }
             }
-
         }
 
         private static void IncluirPromoicao()
@@ -162,6 +189,7 @@ namespace CursoEntityF
             }
         }
 
+        //ExibeEntries(banco.ChangeTracker.Entries());
         private static void ExibeEntries(IEnumerable<EntityEntry> entries)
         {
             foreach (var e in entries)
