@@ -28,7 +28,19 @@ namespace CursoEntityF
 
                 Console.WriteLine($"Endereço de entrega: {cliente.EnderecoDeEntrega.Logradouro}");
 
-                var produto = banco.Produtos.Include(c => c.Compras).FirstOrDefault();
+                //carregamento Join com Include com objeto relacionado
+                var produto = banco
+                    .Produtos
+                    //.Include(c => c.Compras)
+                    .FirstOrDefault();
+
+                //carregamento Join explicito com objeto relacionado 
+                banco
+                    .Entry(produto)
+                    .Collection(c => c.Compras)
+                    .Query()
+                    .Where(c => c.Preco < 10)
+                    .Load();
 
                 Console.WriteLine($"Mostrando as compras do produto {produto.Nome}");
                 foreach (var item in produto.Compras)

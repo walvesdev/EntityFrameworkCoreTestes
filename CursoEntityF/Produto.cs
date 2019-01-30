@@ -18,7 +18,7 @@ namespace CursoEntityF
 
         public override string ToString()
         {
-            return "Produto: " + this.Nome;
+            return  this.Nome;
         }
     }
     
